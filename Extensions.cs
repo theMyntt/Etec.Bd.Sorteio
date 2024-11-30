@@ -1,5 +1,6 @@
 using System;
 using Etec.Sorteio.Context;
+using Etec.Sorteio.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Etec.Sorteio;
@@ -14,6 +15,16 @@ public static class Extensions
             connectionString,
             m => m.MigrationsAssembly(typeof(DatabaseContext).Assembly.FullName)
         ));
+
+        return services;
+    }
+
+    public static IServiceCollection AddRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<MensagemRepository>();
+        services.AddScoped<ParticipantesRepository>();
+        services.AddScoped<PresenteRepository>();
+        services.AddScoped<SorteioRepository>();
 
         return services;
     }
