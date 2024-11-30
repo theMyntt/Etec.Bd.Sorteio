@@ -33,6 +33,7 @@ public static class Extensions
     public static IServiceCollection AddMvcControllers(this IServiceCollection services)
     {
         services.AddScoped<ParticipanteController>();
+        services.AddScoped<SorteioController>();
 
         return services;
     }
