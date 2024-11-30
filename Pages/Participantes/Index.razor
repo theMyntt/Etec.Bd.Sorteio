@@ -1,0 +1,89 @@
+﻿@page "/participantes"
+@using Etec.Sorteio.Controllers
+@using Etec.Sorteio.Models;
+@using Microsoft.AspNetCore.Components.Forms;
+@inject ParticipanteController _controller;
+
+<EditForm Model="@participante" FormName="CreationForm" OnValidSubmit="CreateAsync">
+    <h2>Criar Participantes</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <InputText @bind-Value="@participante.Name" />
+                </td>
+                <td>
+                    <button type="submit">Salvar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</EditForm>
+
+<h2>Participantes já existentes</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nome</th>
+            <th>Opções</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var model in models)
+        {
+            <tr>
+                <td>@model.Id</td>
+                <td>@model.Name</td>
+                <td>
+                    <button @onclick="() => DeleteAsync(model.Id)">Deletar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private IEnumerable<ParticipanteModel> models { get; set; } = new List<ParticipanteModel>();
+    private ParticipanteModel participante { get; set; } = new ParticipanteModel { Name = string.Empty };
+
+    protected override async Task OnInitializedAsync()
+    {
+        models = await _controller.GetAsync();
+    }
+
+    private async void DeleteAsync(int id)
+    {
+        try
+        {
+            await _controller.DeleteAsync(id);
+            models = await _controller.GetAsync();
+            StateHasChanged();
+        }
+        catch (Exception)
+        {
+            return;
+        }
+    }
+
+    private async void CreateAsync()
+    {
+        try
+        {
+            await _controller.CreateAsync(participante.Name);
+            participante.Name = string.Empty;
+            models = await _controller.GetAsync();
+            StateHasChanged();
+        }
+        catch (Exception)
+        {
+            return;
+        }
+    }
+}
