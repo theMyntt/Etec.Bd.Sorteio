@@ -7,6 +7,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddDatabaseContext(builder.Configuration);
 builder.Services.AddRepositories();
+builder.Services.AddMvcControllers();
 
 var app = builder.Build();
 

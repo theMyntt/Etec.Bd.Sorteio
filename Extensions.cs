@@ -1,5 +1,6 @@
 using System;
 using Etec.Sorteio.Context;
+using Etec.Sorteio.Controllers;
 using Etec.Sorteio.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,6 +26,13 @@ public static class Extensions
         services.AddScoped<ParticipantesRepository>();
         services.AddScoped<PresenteRepository>();
         services.AddScoped<SorteioRepository>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddMvcControllers(this IServiceCollection services)
+    {
+        services.AddScoped<ParticipanteController>();
 
         return services;
     }
