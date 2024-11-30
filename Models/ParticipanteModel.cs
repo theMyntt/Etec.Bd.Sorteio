@@ -12,6 +12,7 @@ public class ParticipanteModel
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
+    [Required]
     [Column("nome")]
     public required string Name { get; set; }
 }
