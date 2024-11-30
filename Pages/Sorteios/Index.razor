@@ -1,0 +1,68 @@
+﻿@page "/sorteios"
+@using Etec.Sorteio.Controllers;
+@using Etec.Sorteio.Models;
+@using Microsoft.AspNetCore.Components.Forms;
+@inject SorteioController _controller;
+
+<h3>Sorteios</h3>
+
+<button @onclick="@MakeRaffle">Realizar um sorteio</button>
+
+@if (models.Any())
+{
+    <h2>Ultimo Sorteio Realizado</h2>
+    <table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Id do Participante</th>
+            <th>Id do Amigo Secreto</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var model in models)
+            {
+                <tr>
+                    <td>@model.Id</td>
+                    <td>@model.ParticipantId</td>
+                    <td>@model.SecretFriendId</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h2>Nenhum Sorteio encontrado</h2>
+}
+
+@code {
+    private IEnumerable<SorteioModel> models { get; set; } = new List<SorteioModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        models = await _controller.GetAsync();
+    }
+
+    private async void MakeRaffle()
+    {
+        try
+        {
+
+            if (models.Any())
+            {
+                foreach (var model in models)
+                {
+                    await _controller.DeleteAsync(model.Id);
+                }
+            }
+            await _controller.MakeRaffle();
+            models = await _controller.GetAsync();
+            StateHasChanged();
+        }
+        catch (Exception)
+        {
+            return;
+        }
+    }
+}
