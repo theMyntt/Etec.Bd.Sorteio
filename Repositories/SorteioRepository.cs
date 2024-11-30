@@ -32,4 +32,9 @@ public class SorteioRepository
     {
         return await _context.Sorteios.ToListAsync();
     }
+
+    public async Task MakeRaffle()
+    {
+        await _context.Database.ExecuteSqlRawAsync("EXEC realizar_sorteio");
+    }
 }
