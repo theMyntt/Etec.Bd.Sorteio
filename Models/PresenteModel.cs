@@ -15,6 +15,7 @@ public class PresenteModel
     [Column("id_sorteio")]
     public int? RaffleId { get; set; }
 
+    [Required]
     [Column("descricao")]
     public required string About { get; set; }
 }

@@ -1,0 +1,93 @@
+﻿@page "/presentes"
+@using Etec.Sorteio.Models
+@using Etec.Sorteio.Controllers
+@using Microsoft.AspNetCore.Components.Forms
+@inject PresenteController _controller;
+@inject IJSRuntime JS;
+
+<h3>Presentes</h3>
+
+<script>
+    function reload() {
+        location.reload();
+    }
+</script>
+
+<EditForm Model="@presente" FormName="CreationForm" OnValidSubmit="CreateAsync">
+    <h2>Criar Presente</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <InputText @bind-Value="@presente.About" />
+                </td>
+                <td>
+                    <button type="submit">Salvar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</EditForm>
+
+
+@if (models.Any())
+{
+    <h2>Presentes já existentes</h2>
+    <table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nome</th>
+            <th>Id do Sorteio</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var model in models)
+            {
+                <tr>
+                    <td>@model.Id</td>
+                    <td>@model.About</td>
+                    <td>@model.RaffleId</td>
+                    <td>
+                        <button @onclick="() => DeleteAsync(model.Id)">Deletar</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h2>Nenhum Presente encontrado</h2>
+}
+
+@code {
+    private IEnumerable<PresenteModel> models { get; set; } = new List<PresenteModel>();
+    private PresenteModel presente { get; set; } = new PresenteModel { About = string.Empty };
+
+    protected override async Task OnInitializedAsync()
+    {
+        models = await _controller.GetAsync();
+    }
+
+    private async void DeleteAsync(int id)
+    {
+        await _controller.DeleteAsync(id);
+        models = await _controller.GetAsync();
+        StateHasChanged();
+    }
+
+    private async void CreateAsync()
+    {
+        await _controller.CreateAsync(presente);
+        presente.About = string.Empty;
+        await JS.InvokeVoidAsync("reload");
+    }
+}
