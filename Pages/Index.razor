@@ -1,3 +1,33 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
+<h2>Bem vindo</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <button id="prt">Gerenciar Participantes</button>
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                <button id="prs">Gerenciar Presentes</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button id="srt">Gerenciar Sorteios</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<script>
+    document.getElementById("prt").addEventListener("click", () => location.href = "/participantes")
+    document.getElementById("prs").addEventListener("click", () => location.href = "/presentes")
+    document.getElementById("srt").addEventListener("click", () => location.href = "/sorteios")
+</script>
