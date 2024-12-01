@@ -1,0 +1,99 @@
+﻿@page "/mensagens"
+@using Etec.Sorteio.Models
+@using Etec.Sorteio.Controllers
+@using Microsoft.AspNetCore.Components.Forms
+@inject MensagemController _controller
+@inject IJSRuntime JS
+
+<h3>Mensagens</h3>
+
+<script>
+    function reload() {
+        location.reload()
+    }
+</script>
+
+<EditForm Model="@mensagem" FormName="CreationForm" OnValidSubmit="CreateAsync">
+    <h2>Criar Participantes</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Id de quem vai enviar</th>
+                <th>Mensagem</th>
+                <th>Id de quem vai receber</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <InputNumber @bind-Value="@mensagem.SenderId" />
+                </td>
+                <td>
+                    <InputText @bind-Value="@mensagem.Message" />
+                </td>
+                <td>
+                    <InputNumber @bind-Value="@mensagem.RecipientId" />
+                </td>
+                <td>
+                    <button type="submit">Salvar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</EditForm>
+
+@if (models.Any())
+{
+    <h2>Participantes já existentes</h2>
+    <table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Id de quem enviou</th>
+            <th>Mensagem</th>
+            <th>Id de quem recebeu</th>
+            <th>Opções</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var model in models)
+            {
+                <tr>
+                    <td>@model.Id</td>
+                    <td>@model.SenderId</td>
+                    <td>@model.Message</td>
+                    <td>@model.RecipientId</td>
+                    <td>
+                        <button @onclick="() => DeleteAsync(model.Id)">Deletar</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+else
+{
+    <h2>Nenhuma Mensagem encontrada</h2>
+}
+
+@code {
+    private IEnumerable<MensagemModel> models { get; set; } = new List<MensagemModel>();
+    private MensagemModel mensagem { get; set; } = new MensagemModel { Message = string.Empty };
+
+    protected override async Task OnInitializedAsync()
+    {
+        models = await _controller.GetAsync();
+    }
+
+    private async void CreateAsync() {
+        await _controller.CreateAsync(mensagem);
+        await JS.InvokeVoidAsync("reload");
+    }
+
+    private async void DeleteAsync(int id)
+    {
+        await _controller.DeleteAsync(id);
+    }
+}

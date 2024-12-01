@@ -35,6 +35,7 @@ public static class Extensions
         services.AddScoped<ParticipanteController>();
         services.AddScoped<SorteioController>();
         services.AddScoped<PresenteController>();
+        services.AddScoped<MensagemController>();
 
         return services;
     }

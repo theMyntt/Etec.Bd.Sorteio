@@ -21,12 +21,18 @@
         </tr>
         <tr>
             <td>
+                <button id="msg">Gerenciar Mensagens</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
                 <button id="srt">Gerenciar Sorteios</button>
             </td>
         </tr>
     </tbody>
 </table>
 <script>
+    document.getElementById("msg").addEventListener("click", () => location.href = "/mensagens")
     document.getElementById("prt").addEventListener("click", () => location.href = "/participantes")
     document.getElementById("prs").addEventListener("click", () => location.href = "/presentes")
     document.getElementById("srt").addEventListener("click", () => location.href = "/sorteios")
