@@ -13,7 +13,7 @@ public class PresenteModel
     public int Id { get; set; }
 
     [Column("id_sorteio")]
-    public int RaffleId { get; set; }
+    public int? RaffleId { get; set; }
 
     [Column("descricao")]
     public required string About { get; set; }
